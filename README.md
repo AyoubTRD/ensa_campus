@@ -1,3 +1,3 @@
-# ensa_campus
+# ENSA Campus
 
-A new Flutter project.
+A social media app for the nations ENSA school.
