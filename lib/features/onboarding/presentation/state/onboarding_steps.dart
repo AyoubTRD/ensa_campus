@@ -4,17 +4,19 @@ const onboardingSteps = [
   OnboardingStepEntity(
     title: 'Find all the resources',
     description:
-        'lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+        'View and download all the resources you need for your studies posted by your colleagues and professors.',
     imagePath: 'assets/images/onboarding/resources_step.png',
   ),
   OnboardingStepEntity(
-    title: 'Connect with other people',
-    description: 'Step 2 description...',
+    title: 'Connect with your colleagues',
+    description:
+        'Be the first to know of all the announcements and events that are relevant to you!',
     imagePath: 'assets/images/onboarding/resources_step.png',
   ),
   OnboardingStepEntity(
-    title: 'Step 3',
-    description: 'Step 3 description...',
+    title: 'Stay up to date',
+    description:
+        'Be the first to know of all the announcements and events that are relevant to you!',
     imagePath: 'assets/images/onboarding/resources_step.png',
   ),
 ];
