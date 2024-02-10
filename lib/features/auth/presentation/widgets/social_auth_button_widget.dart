@@ -1,6 +1,8 @@
 import 'package:ensa_campus/features/auth/domain/common/auth_method.dart';
 import 'package:flutter/material.dart';
 
+import 'package:ionicons/ionicons.dart';
+
 class SocialAuthButton extends StatelessWidget {
   const SocialAuthButton(this.authMethod, {super.key, required this.onPressed});
 
@@ -28,7 +30,7 @@ class SocialAuthButton extends StatelessWidget {
         ),
         child: Icon(
           getIconForSocialAuthMethod(authMethod),
-          size: 24.0,
+          size: getSizeForSocialAuthMethod(authMethod),
           color: Theme.of(context).colorScheme.onSurface,
         ),
       ),
@@ -36,9 +38,17 @@ class SocialAuthButton extends StatelessWidget {
   }
 
   IconData getIconForSocialAuthMethod(AuthMethod authMethod) {
-    if (authMethod is GoogleAuthMethod) return Icons.g_translate;
+    if (authMethod is GoogleAuthMethod) return Ionicons.logo_google;
     if (authMethod is AppleAuthMethod) return Icons.apple;
 
     throw Exception('This method is not supported');
+  }
+
+  double getSizeForSocialAuthMethod(AuthMethod authMethod) {
+    // This is done to make the google icon and apple icon match
+    // in size visually
+    if (authMethod is AppleAuthMethod) return 28.0;
+
+    return 24.0;
   }
 }

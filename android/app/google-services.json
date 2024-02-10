@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "915343870241",
+    "project_id": "ensa-campus",
+    "storage_bucket": "ensa-campus.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:915343870241:android:4f6549f1cce4be3e19d660",
+        "android_client_info": {
+          "package_name": "com.example.ensa_campus"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_y4wjjOlqniHd1xKRy3EF2QLF_Zqchn4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
