@@ -1,6 +1,5 @@
 import 'package:ensa_campus/features/onboarding/domain/entities/onboarding_step_entity.dart';
 import 'package:ensa_campus/features/onboarding/presentation/state/onboarding_state.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'onboarding_provider.g.dart';
