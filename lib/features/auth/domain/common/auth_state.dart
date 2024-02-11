@@ -7,15 +7,15 @@ class InitialAuthState extends AuthState {
   List<Object?> get props => [];
 }
 
-class NotAuthenticated extends AuthState {
+class NotAuthenticatedState extends AuthState {
   @override
   List<Object?> get props => [];
 }
 
-class Authenticated extends AuthState {
+class AuthenticatedState extends AuthState {
   final String token;
 
-  Authenticated(this.token);
+  AuthenticatedState(this.token);
 
   @override
   List<Object?> get props => [token];
