@@ -62,7 +62,7 @@ class SupabaseAuthRepository implements AuthRepository {
   Future<AuthState> checkAuth() async {
     final session = client.auth.currentSession;
 
-    if (session == null) {
+    if (session == null || session.isExpired) {
       return NotAuthenticatedState();
     } else {
       return AuthenticatedState(session.accessToken);

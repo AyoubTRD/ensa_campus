@@ -12,12 +12,10 @@ class Onboarding extends _$Onboarding {
   OnboardingState build(List<OnboardingStepEntity> onboardingSteps) {
     allOnboardingSteps = onboardingSteps;
     if (allOnboardingSteps.length == 1) {
-      state = OnboardingEndState(allOnboardingSteps.first);
+      return OnboardingEndState(allOnboardingSteps.first);
     } else {
-      state = OnboardingStepState(0, allOnboardingSteps.first);
+      return OnboardingStepState(0, allOnboardingSteps.first);
     }
-
-    return state;
   }
 
   void nextStep() {

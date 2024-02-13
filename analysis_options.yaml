@@ -2,4 +2,4 @@ include: package:flutter_lints/flutter.yaml
 
 analyzer:
   plugins:
-    - customer_lint
+    - custom_lint
