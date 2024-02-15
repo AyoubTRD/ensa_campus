@@ -119,7 +119,7 @@ class OnboardingStepWidget extends ConsumerWidget {
   void goToSignUpPage(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => SignUpPage(),
+        builder: (context) => const SignUpPage(),
       ),
     );
   }
@@ -127,7 +127,7 @@ class OnboardingStepWidget extends ConsumerWidget {
   void goToSignInPage(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => SignInPage(),
+        builder: (context) => const SignInPage(),
       ),
     );
   }

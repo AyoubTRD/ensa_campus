@@ -144,7 +144,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
 
         if (state is AuthenticatedState) {
           Navigator.of(context)
-              .push(MaterialPageRoute(builder: (_) => AuthSplashScreen()));
+              .push(MaterialPageRoute(builder: (_) => const AuthSplashScreen()));
         }
       }
     } finally {

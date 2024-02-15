@@ -14,7 +14,7 @@ class AuthSplashScreen extends ConsumerWidget {
       if (next is AuthenticatedState) {
         Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
-            builder: (_) => LoggedInWidget(),
+            builder: (_) => const LoggedInWidget(),
           ),
           (route) => false,
         );
@@ -46,7 +46,7 @@ class LoggedInWidget extends ConsumerWidget {
 
             Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
-                builder: (_) => AuthSplashScreen(),
+                builder: (_) => const AuthSplashScreen(),
               ),
               (route) => false,
             );

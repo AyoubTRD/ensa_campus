@@ -12,7 +12,7 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:gap/gap.dart';
 
 class SignUpPage extends ConsumerStatefulWidget {
-  SignUpPage({super.key});
+  const SignUpPage({super.key});
 
   @override
   ConsumerState<SignUpPage> createState() => _SignUpPageState();
@@ -167,7 +167,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
         final state = await ref.read(authProvider.notifier).checkAuthState();
         if (state is AuthenticatedState) {
           Navigator.of(context)
-              .push(MaterialPageRoute(builder: (_) => AuthSplashScreen()));
+              .push(MaterialPageRoute(builder: (_) => const AuthSplashScreen()));
         }
       }
     } finally {
