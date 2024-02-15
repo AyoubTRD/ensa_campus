@@ -1,3 +1,4 @@
+import 'package:ensa_campus/features/auth/domain/common/adapters/supabase_user_adapter.dart';
 import 'package:ensa_campus/features/auth/domain/common/auth_method.dart';
 import 'package:ensa_campus/features/auth/domain/common/auth_method_params.dart';
 import 'package:ensa_campus/features/auth/domain/common/auth_state.dart';
@@ -12,7 +13,7 @@ class SupabaseAuthRepository implements AuthRepository {
   @override
   Future<AuthState> register<Method extends AuthMethod>(
       RegisterAuthMethodParams<Method> params) async {
-    if (AuthMethod is ManualEntryAuthMethod) {
+    if (Method == ManualEntryAuthMethod) {
       final registerParams = params as RegisterManualEntryAuthParams;
 
       final response = await client.auth.signUp(
@@ -23,17 +24,20 @@ class SupabaseAuthRepository implements AuthRepository {
       if (response.session == null) {
         return NotAuthenticatedState();
       } else {
-        return AuthenticatedState(response.session!.accessToken);
+        return AuthenticatedState(
+          response.session!.accessToken,
+          SupabaseUserAdapter(response.session!.user),
+        );
       }
     } else {
-      throw UnimplementedError();
+      throw Exception('Unsupported auth method ${Method.toString()}');
     }
   }
 
   @override
   Future<AuthState> login<Method extends AuthMethod>(
       LoginAuthMethodParams<Method> params) async {
-    if (AuthMethod is ManualEntryAuthMethod) {
+    if (Method == ManualEntryAuthMethod) {
       final loginParams = params as LoginManualEntryAuthParams;
 
       final response = await client.auth.signInWithPassword(
@@ -44,10 +48,13 @@ class SupabaseAuthRepository implements AuthRepository {
       if (response.session == null) {
         return NotAuthenticatedState();
       } else {
-        return AuthenticatedState(response.session!.accessToken);
+        return AuthenticatedState(
+          response.session!.accessToken,
+          SupabaseUserAdapter(response.session!.user),
+        );
       }
     } else {
-      throw UnimplementedError();
+      throw Exception('Unsupported auth method ${Method.toString()}');
     }
   }
 
@@ -65,7 +72,10 @@ class SupabaseAuthRepository implements AuthRepository {
     if (session == null || session.isExpired) {
       return NotAuthenticatedState();
     } else {
-      return AuthenticatedState(session.accessToken);
+      return AuthenticatedState(
+        session.accessToken,
+        SupabaseUserAdapter(session.user),
+      );
     }
   }
 }

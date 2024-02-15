@@ -1,4 +1,3 @@
-import 'package:ensa_campus/di/di.dart';
 import 'package:ensa_campus/features/auth/domain/common/auth_state.dart';
 import 'package:ensa_campus/features/auth/presentation/state/auth_provider.dart';
 import 'package:ensa_campus/features/onboarding/presentation/pages/onboarding_steps_page.dart';
@@ -11,15 +10,11 @@ class AuthSplashScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen(authProvider(sl()), (previous, next) {
+    ref.listen(authProvider, (previous, next) {
       if (next is AuthenticatedState) {
         Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
-            builder: (_) => const Scaffold(
-              body: Center(
-                child: Text('Authenticated'),
-              ),
-            ),
+            builder: (_) => LoggedInWidget(),
           ),
           (route) => false,
         );
@@ -34,5 +29,30 @@ class AuthSplashScreen extends ConsumerWidget {
     });
 
     return const SplashScreen();
+  }
+}
+
+class LoggedInWidget extends ConsumerWidget {
+  const LoggedInWidget({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Scaffold(
+      body: Center(
+        child: FilledButton(
+          child: const Text('Log out'),
+          onPressed: () async {
+            await ref.read(authProvider.notifier).logout();
+
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (_) => AuthSplashScreen(),
+              ),
+              (route) => false,
+            );
+          },
+        ),
+      ),
+    );
   }
 }

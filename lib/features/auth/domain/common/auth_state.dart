@@ -1,3 +1,4 @@
+import 'package:ensa_campus/features/auth/domain/entities/user_entity.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class AuthState extends Equatable {}
@@ -14,11 +15,12 @@ class NotAuthenticatedState extends AuthState {
 
 class AuthenticatedState extends AuthState {
   final String token;
+  final UserEntity user;
 
-  AuthenticatedState(this.token);
+  AuthenticatedState(this.token, this.user);
 
   @override
-  List<Object?> get props => [token];
+  List<Object?> get props => [token, user];
 }
 
 class UndeterminedAuthState extends AuthState {

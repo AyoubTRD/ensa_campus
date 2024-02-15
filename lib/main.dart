@@ -1,8 +1,10 @@
 import 'package:ensa_campus/di/di.dart';
+import 'package:ensa_campus/features/auth/domain/usecase/signup_usecase.dart';
+import 'package:ensa_campus/features/auth/presentation/pages/signin_page.dart';
+import 'package:ensa_campus/features/auth/presentation/pages/signup_page.dart';
 import 'package:ensa_campus/features/onboarding/presentation/pages/onboarding_steps_page.dart';
 import 'package:ensa_campus/firebase_options.dart';
 import 'package:ensa_campus/shared/auth/auth_splash_screen.dart';
-import 'package:ensa_campus/shared/widgets/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';

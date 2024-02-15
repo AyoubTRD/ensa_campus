@@ -1,3 +1,5 @@
+import 'package:ensa_campus/features/auth/presentation/pages/signin_page.dart';
+import 'package:ensa_campus/features/auth/presentation/pages/signup_page.dart';
 import 'package:ensa_campus/features/onboarding/domain/entities/onboarding_step_entity.dart';
 import 'package:ensa_campus/features/onboarding/presentation/state/onboarding_provider.dart';
 import 'package:ensa_campus/features/onboarding/presentation/state/onboarding_state.dart';
@@ -97,19 +99,35 @@ class OnboardingStepWidget extends ConsumerWidget {
                       width: double.infinity,
                       child: FilledButton(
                         child: const Text('Create an account'),
-                        onPressed: () {},
+                        onPressed: () => goToSignUpPage(context),
                       ),
                     ),
                     SizedBox(
                       width: double.infinity,
                       child: FilledButton.tonal(
-                        onPressed: () {},
+                        onPressed: () => goToSignInPage(context),
                         child: const Text('Sign in'),
                       ),
                     ),
                   ],
                 ),
         ],
+      ),
+    );
+  }
+
+  void goToSignUpPage(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => SignUpPage(),
+      ),
+    );
+  }
+
+  void goToSignInPage(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => SignInPage(),
       ),
     );
   }
