@@ -1,3 +1,3 @@
 # ENSA Campus
 
-A social media app for the nations ENSA school.
+A social media app for the national ENSA schools.
