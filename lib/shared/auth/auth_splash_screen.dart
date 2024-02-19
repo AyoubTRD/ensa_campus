@@ -52,7 +52,6 @@ class LoggedInWidget extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             FilledButton(
-              child: const Text('Log out'),
               onPressed: state.isLoading
                   ? null
                   : () async {
@@ -64,6 +63,7 @@ class LoggedInWidget extends ConsumerWidget {
                         (route) => false,
                       );
                     },
+              child: const Text('Log out'),
             ),
             if (state.hasError)
               Text(
