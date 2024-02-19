@@ -8,6 +8,11 @@ class InitialAuthState extends AuthState {
   List<Object?> get props => [];
 }
 
+class LoadingAuthState extends AuthState {
+  @override
+  List<Object?> get props => [];
+}
+
 class NotAuthenticatedState extends AuthState {
   @override
   List<Object?> get props => [];

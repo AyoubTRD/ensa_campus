@@ -1,9 +1,12 @@
 import 'package:ensa_campus/features/auth/domain/common/auth_method.dart';
 import 'package:ensa_campus/features/auth/domain/common/auth_method_params.dart';
 import 'package:ensa_campus/features/auth/domain/common/auth_state.dart';
+import 'package:ensa_campus/features/auth/domain/common/failures/auth_failures.dart';
 import 'package:ensa_campus/features/auth/presentation/state/auth_provider.dart';
+import 'package:ensa_campus/features/auth/presentation/state/signup_provider.dart';
 import 'package:ensa_campus/features/auth/presentation/widgets/social_auth_button_widget.dart';
 import 'package:ensa_campus/shared/auth/auth_splash_screen.dart';
+import 'package:ensa_campus/shared/common/error/failure.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -22,10 +25,55 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
   final _formKey = GlobalKey<FormBuilderState>();
   String? _password;
 
-  bool _isLoading = false;
+  bool _formSubmitted = false;
 
   @override
   Widget build(BuildContext context) {
+    final authState = ref.watch(authProvider);
+    authState.whenOrNull(
+      data: (state) {
+        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+          if (state is AuthenticatedState) {
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (_) => const AuthSplashScreen(),
+              ),
+              (route) => false,
+            );
+          }
+        });
+      },
+    );
+
+    ref.listen(signupProvider, (_, signupState) {
+      signupState.whenOrNull(
+        error: (e, s) {
+          late final String text;
+          if (e is AuthFailure) {
+            text = e.message ?? 'Failed to sign up, please try again';
+          } else if (e is Failure) {
+            text = e.message ?? 'Something went wrong, please try again';
+          } else {
+            text = 'Something went wrong';
+          }
+          WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                backgroundColor: Theme.of(context).colorScheme.error,
+                content: Text(
+                  text,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onError,
+                  ),
+                ),
+              ),
+            );
+          });
+        },
+      );
+    });
+    final signupState = ref.watch(signupProvider);
+
     return Scaffold(
         appBar: AppBar(
           title: const FlutterLogo(),
@@ -40,6 +88,9 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                 Container(),
                 FormBuilder(
                   key: _formKey,
+                  autovalidateMode: _formSubmitted
+                      ? AutovalidateMode.onUserInteraction
+                      : AutovalidateMode.disabled,
                   child: Column(
                     children: [
                       FormBuilderTextField(
@@ -92,7 +143,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                         width: double.infinity,
                         height: 48.0,
                         child: FilledButton(
-                          onPressed: _isLoading
+                          onPressed: signupState.isLoading
                               ? null
                               : () {
                                   handleSubmit();
@@ -152,28 +203,20 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
   void handleSocialAuth(AuthMethod authMethod) {}
 
   Future<void> handleSubmit() async {
-    try {
-      setState(() {
-        _isLoading = true;
-      });
+    setState(() {
+      _formSubmitted = true;
+    });
 
-      if (_formKey.currentState?.saveAndValidate() ?? false) {
-        final email = _formKey.currentState?.fields['email']?.value;
-        final password = _formKey.currentState?.fields['password']?.value;
+    if (_formKey.currentState?.saveAndValidate() ?? false) {
+      final email = _formKey.currentState?.fields['email']?.value;
+      final password = _formKey.currentState?.fields['password']?.value;
 
-        await ref.read(authProvider.notifier).signup<ManualEntryAuthMethod>(
-              RegisterManualEntryAuthParams(email: email, password: password),
-            );
-        final state = await ref.read(authProvider.notifier).checkAuthState();
-        if (state is AuthenticatedState) {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (_) => const AuthSplashScreen()));
-        }
-      }
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
+      await ref.read(signupProvider.notifier).signup<ManualEntryAuthMethod>(
+            RegisterManualEntryAuthParams(
+              email: email,
+              password: password,
+            ),
+          );
     }
   }
 }

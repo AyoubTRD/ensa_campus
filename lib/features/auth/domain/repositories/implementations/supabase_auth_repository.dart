@@ -1,3 +1,6 @@
+import 'package:dartz/dartz.dart';
+import 'package:ensa_campus/features/auth/domain/common/failures/auth_failures.dart';
+import 'package:ensa_campus/shared/common/error/failure.dart';
 import 'package:ensa_campus/features/auth/domain/common/adapters/supabase_user_adapter.dart';
 import 'package:ensa_campus/features/auth/domain/common/auth_method.dart';
 import 'package:ensa_campus/features/auth/domain/common/auth_method_params.dart';
@@ -11,70 +14,95 @@ class SupabaseAuthRepository implements AuthRepository {
   SupabaseAuthRepository({required this.client});
 
   @override
-  Future<AuthState> register<Method extends AuthMethod>(
+  Future<Either<Failure, AuthState>> register<Method extends AuthMethod>(
       RegisterAuthMethodParams<Method> params) async {
     if (Method == ManualEntryAuthMethod) {
       final registerParams = params as RegisterManualEntryAuthParams;
 
-      final response = await client.auth.signUp(
-        email: registerParams.email,
-        password: registerParams.password,
-      );
-
-      if (response.session == null) {
-        return NotAuthenticatedState();
-      } else {
-        return AuthenticatedState(
-          response.session!.accessToken,
-          SupabaseUserAdapter(response.session!.user),
+      try {
+        final response = await client.auth.signUp(
+          email: registerParams.email,
+          password: registerParams.password,
         );
+
+        if (response.session == null) {
+          return Left(RegisterFailure(
+              'Could not create an account with the credentials provided'));
+        } else {
+          return Right(AuthenticatedState(
+            response.session!.accessToken,
+            SupabaseUserAdapter(response.session!.user),
+          ));
+        }
+      } on supabase.AuthException catch (e) {
+        return Left(RegisterFailure(e.message));
+      } catch (e) {
+        return Left(Failure('Unknown error occurred'));
       }
     } else {
-      throw Exception('Unsupported auth method ${Method.toString()}');
+      return Left(
+        RegisterFailure('Unsupported auth method ${Method.toString()}'),
+      );
     }
   }
 
   @override
-  Future<AuthState> login<Method extends AuthMethod>(
+  Future<Either<Failure, AuthState>> login<Method extends AuthMethod>(
       LoginAuthMethodParams<Method> params) async {
     if (Method == ManualEntryAuthMethod) {
       final loginParams = params as LoginManualEntryAuthParams;
 
-      final response = await client.auth.signInWithPassword(
-        email: loginParams.email,
-        password: loginParams.password,
-      );
-
-      if (response.session == null) {
-        return NotAuthenticatedState();
-      } else {
-        return AuthenticatedState(
-          response.session!.accessToken,
-          SupabaseUserAdapter(response.session!.user),
+      try {
+        final response = await client.auth.signInWithPassword(
+          email: loginParams.email,
+          password: loginParams.password,
         );
+
+        if (response.session == null) {
+          return Left(LoginFailure('Invalid credentials'));
+        } else {
+          return Right(AuthenticatedState(
+            response.session!.accessToken,
+            SupabaseUserAdapter(response.session!.user),
+          ));
+        }
+      } on supabase.AuthException catch (e) {
+        return Left(LoginFailure(e.message));
+      } catch (e) {
+        return Left(Failure('Unknown error occurred'));
       }
     } else {
-      throw Exception('Unsupported auth method ${Method.toString()}');
+      return Left(LoginFailure('Unsupported auth method ${Method.toString()}'));
     }
   }
 
   @override
-  Future<AuthState> logout() async {
+  Future<Either<Failure, AuthState>> logout() async {
     await client.auth.signOut();
 
-    return NotAuthenticatedState();
+    return Right(NotAuthenticatedState());
   }
 
   @override
-  Future<AuthState> checkAuth() async {
+  Future<Either<Failure, AuthState>> checkAuth() async {
     final session = client.auth.currentSession;
 
-    if (session == null || session.isExpired) {
-      return NotAuthenticatedState();
+    if (session == null) {
+      return Right(NotAuthenticatedState());
     } else {
-      return AuthenticatedState(
-        session.accessToken,
-        SupabaseUserAdapter(session.user),
+      if (session.isExpired) {
+        try {
+          await client.auth.refreshSession();
+        } on supabase.AuthException catch (e) {
+          return Left(AuthFailure(e.message));
+        }
+      }
+
+      return Right(
+        AuthenticatedState(
+          session.accessToken,
+          SupabaseUserAdapter(session.user),
+        ),
       );
     }
   }
