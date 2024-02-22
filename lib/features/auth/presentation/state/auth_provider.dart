@@ -1,6 +1,7 @@
 import 'package:ensa_campus/di/di.dart';
 import 'package:ensa_campus/features/auth/domain/common/auth_state.dart';
 import 'package:ensa_campus/features/auth/domain/usecase/check_auth_usecase.dart';
+import 'package:ensa_campus/features/shared/presentation/providers/logout_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

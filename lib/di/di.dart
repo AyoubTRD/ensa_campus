@@ -1,7 +1,9 @@
 import 'package:ensa_campus/features/auth/data/remote/supabase_user_data_source.dart';
 import 'package:ensa_campus/features/auth/domain/repositories/auth_repository.dart';
 import 'package:ensa_campus/features/auth/domain/repositories/implementations/supabase_auth_repository.dart';
+import 'package:ensa_campus/features/auth/domain/usecase/logout_usecase_impl.dart';
 import 'package:ensa_campus/features/shared/data/user_data_source.dart';
+import 'package:ensa_campus/features/shared/domain/usecases/logout_usecase.dart';
 import 'package:get_it/get_it.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -16,4 +18,5 @@ void setupDI() {
 
   // Authentication
   sl.registerSingleton<AuthRepository>(SupabaseAuthRepository(client: sl()));
+  sl.registerFactory<LogoutUsecase>(() => LogoutUsecaseImpl(sl()));
 }

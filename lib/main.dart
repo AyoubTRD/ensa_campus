@@ -1,6 +1,7 @@
 import 'package:ensa_campus/di/di.dart';
 import 'package:ensa_campus/features/student/presentation/pages/basic_information_form_page.dart';
 import 'package:ensa_campus/firebase_options.dart';
+import 'package:ensa_campus/shared/auth/auth_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -40,7 +41,7 @@ class MainApp extends StatelessWidget {
           ),
         ),
       ),
-      home: BasicInformationFormPage(),
+      home: AuthSplashScreen(),
     );
   }
 }

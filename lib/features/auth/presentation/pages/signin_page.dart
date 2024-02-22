@@ -2,9 +2,11 @@ import 'package:ensa_campus/features/auth/domain/common/auth_method.dart';
 import 'package:ensa_campus/features/auth/domain/common/auth_method_params.dart';
 import 'package:ensa_campus/features/auth/domain/common/auth_state.dart';
 import 'package:ensa_campus/features/auth/domain/common/failures/auth_failures.dart';
+import 'package:ensa_campus/features/auth/presentation/pages/signup_page.dart';
 import 'package:ensa_campus/features/auth/presentation/state/auth_provider.dart';
 import 'package:ensa_campus/features/auth/presentation/state/login_provider.dart';
 import 'package:ensa_campus/features/auth/presentation/widgets/social_auth_button_widget.dart';
+import 'package:ensa_campus/features/student/presentation/pages/basic_information_form_page.dart';
 import 'package:ensa_campus/shared/auth/auth_splash_screen.dart';
 import 'package:ensa_campus/shared/common/error/failure.dart';
 import 'package:flutter/gestures.dart';
@@ -172,7 +174,13 @@ class _SignInPageState extends ConsumerState<SignInPage> {
     );
   }
 
-  void goToSignUp() {}
+  void goToSignUp() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => SignUpPage(),
+      ),
+    );
+  }
 
   void handleSocialAuth(AuthMethod authMethod) {}
 

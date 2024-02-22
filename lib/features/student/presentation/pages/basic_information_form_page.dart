@@ -1,19 +1,38 @@
+import 'package:ensa_campus/features/shared/presentation/providers/logout_provider.dart';
+import 'package:ensa_campus/features/student/presentation/pages/school_information_form_page.dart';
+import 'package:ensa_campus/shared/auth/auth_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
-class BasicInformationFormPage extends StatelessWidget {
+class BasicInformationFormPage extends ConsumerWidget {
   BasicInformationFormPage({super.key});
 
   final _formKey = GlobalKey<FormBuilderState>();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final logoutLoading = ref.watch(logoutProvider).isLoading;
+
     return Scaffold(
       appBar: AppBar(
         title: const FlutterLogo(),
         centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: logoutLoading
+                ? null
+                : () {
+                    ref.read(logoutProvider.notifier).logout().then((value) {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (_) => AuthSplashScreen()));
+                    });
+                  },
+            icon: const Icon(Symbols.logout),
+          )
+        ],
       ),
       body: SafeArea(
         child: Center(
@@ -86,7 +105,13 @@ class BasicInformationFormPage extends StatelessWidget {
                   width: double.infinity,
                   height: 48.0,
                   child: FilledButton.icon(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => SchoolInformationFormPage(),
+                        ),
+                      );
+                    },
                     label: const Text('Next'),
                     icon: const Icon(Symbols.arrow_right_alt),
                   ),
