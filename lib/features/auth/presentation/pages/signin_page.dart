@@ -46,32 +46,37 @@ class _SignInPageState extends ConsumerState<SignInPage> {
         loading: () {},
       );
     });
-    final loginState = ref.watch(loginProvider);
-    loginState.whenOrNull(
-      error: (e, s) {
-        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-          late final String text;
-          if (e is AuthFailure) {
-            text = e.message ?? 'Failed to sign in, please try again';
-          } else if (e is Failure) {
-            text = e.message ?? 'Something went wrong, please try again';
-          } else {
-            text = 'Something went wrong';
-          }
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              backgroundColor: Theme.of(context).colorScheme.error,
-              content: Text(
-                text,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onError,
+
+    ref.listen(loginProvider, (previous, next) {
+      if (previous != next) {
+        next.whenOrNull(
+          error: (e, s) {
+            WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+              late final String text;
+              if (e is AuthFailure) {
+                text = e.message ?? 'Failed to sign in, please try again';
+              } else if (e is Failure) {
+                text = e.message ?? 'Something went wrong, please try again';
+              } else {
+                text = 'Something went wrong';
+              }
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  backgroundColor: Theme.of(context).colorScheme.error,
+                  content: Text(
+                    text,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onError,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          );
-        });
-      },
-    );
+              );
+            });
+          },
+        );
+      }
+    });
+    final loginState = ref.watch(loginProvider);
 
     return Scaffold(
       appBar: AppBar(

@@ -27,7 +27,7 @@ class AuthSplashScreen extends ConsumerWidget {
           print('User not authenticated');
           Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
-              builder: (_) => OnboardingStepsPageWidget(),
+              builder: (_) => OnboardingStepsPage(),
             ),
             (route) => false,
           );

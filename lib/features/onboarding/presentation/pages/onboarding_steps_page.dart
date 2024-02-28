@@ -4,10 +4,10 @@ import 'package:ensa_campus/features/onboarding/presentation/widgets/onbaording_
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class OnboardingStepsPageWidget extends ConsumerWidget {
+class OnboardingStepsPage extends ConsumerWidget {
   final PageController _pageController = PageController();
 
-  OnboardingStepsPageWidget({super.key});
+  OnboardingStepsPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
